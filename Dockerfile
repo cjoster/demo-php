@@ -1,3 +1,3 @@
 FROM webdevops/php-apache
 
-COPY index.php app/
+COPY site/* app/
