@@ -1,0 +1,16 @@
+#@ load("@ytt:overlay", "overlay")
+#@ default_uid = 1000
+#@overlay/match by=overlay.subset({"kind": "Deployment"}), expects="0+"
+---
+spec:
+  template:
+    spec:
+      #@overlay/match-child-defaults missing_ok=True
+      securityContext:
+        #@overlay/replace or_add=True, via=lambda l,r: l if type(l)=="int" and l >= 1 and l <= 65533 else r
+        runAsUser: #@ default_uid
+        #@overlay/replace or_add=True, via=lambda l,r: l if type(l)=="int" and l >= 1 and l <= 65533 else r
+        runAsGroup: #@ default_uid
+        #@overlay/replace or_add=True, via=lambda l,r: l if type(l)=="int" and l >= 1 and l <= 65533 else r
+        fsGroup: #@ default_uid
+        runAsNonRoot: true

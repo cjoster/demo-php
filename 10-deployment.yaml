@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: "2022-07-18T18:24:02Z"
+  generation: 1
+  labels:
+    k8s-app: kube-dns
+  name: coredns
+  namespace: kube-system
+  resourceVersion: "127000"
+  uid: 804f9027-99e0-40e5-8307-95397c7ae928
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - name: php-demo
+        image: repo/library/php-demo:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 8443
+          name: https
+          protocol: TCP
+        - containerPort: 9000
+          name: fpm
+          protocol: TCP
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+          runAsGroup: 1000
+          runAsNonRoot: true
+          fsGroup: 1000
+          capabilities:
+            drop:
+            - all
+          readOnlyRootFilesystem: true
+      nodeSelector:
+        kubernetes.io/os: linux
+      serviceAccount: php-demo-sa
+      serviceAccountName: php-demo-sa
